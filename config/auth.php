@@ -2,8 +2,25 @@
 
 use App\Models\User;
 
-return [    
-    
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Defaults
+    |--------------------------------------------------------------------------
+    */
+
+    'defaults' => [
+        'guard' => env('AUTH_GUARD', 'web'),
+        'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Guards
+    |--------------------------------------------------------------------------
+    */
+
     'guards' => [
         'web' => [
             'driver' => 'session',
@@ -11,15 +28,21 @@ return [
         ],
         'api_admin' => [
             'driver' => 'jwt',
-            'provider' => 'users', // Merujuk ke providers.users
-            'hash'     => false,
+            'provider' => 'users',
+            'hash' => false,
         ],
-        'api_customer'  => [
-            'driver'    => 'jwt',
-            'provider'  => 'customers', // PERBAIKAN: Tambahkan 's' agar cocok dengan nama di bawah
-            'hash'      => false,
+        'api_customer' => [
+            'driver' => 'jwt',
+            'provider' => 'customers',
+            'hash' => false,
         ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | User Providers
+    |--------------------------------------------------------------------------
+    */
 
     'providers' => [
         'users' => [
@@ -30,11 +53,32 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],
-        'customers' => [ // Nama ini harus sama persis dengan yang dipanggil di guards
-            'driver'    => 'eloquent',
-            'model'     => App\Models\Customer::class,
+        'customers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Customer::class,
         ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Resetting Passwords
+    |--------------------------------------------------------------------------
+    */
+
+    'passwords' => [
+        'users' => [
+            'provider' => 'users',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Password Confirmation Timeout
+    |--------------------------------------------------------------------------
+    */
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 

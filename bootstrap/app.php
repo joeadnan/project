@@ -12,7 +12,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'IsAuth'   => App\Http\Middleware\IsAuth::class,
+            'IsMember' => App\Http\Middleware\CheckMembership::class,
+        ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'movie',
+            'movie/*',
+            'request/'
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function(\Illuminate\Auth\AuthenticationException $e, $request){

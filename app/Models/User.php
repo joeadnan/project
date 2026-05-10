@@ -18,24 +18,22 @@ class User extends Authenticatable implements JWTSubject
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /** hal 68
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected $fillable = [
         'name',
         'email',
-        'password'
+        'password',
     ];
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [
@@ -43,11 +41,14 @@ class User extends Authenticatable implements JWTSubject
             'password' => 'hashed',
         ];
     }
+
     public function products()
     {
         return $this->hasMany(Product::class);
     }
-    /** get identifier name for JWT
+
+    /**
+     * Get the identifier for JWT.
      *
      * @return mixed
      */
@@ -55,12 +56,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
-    /** get custom claims for JWT
+
+    /**
+     * Get custom claims for JWT.
      *
      * @return array
-    public function getJWTCustomClaims()
      */
-    public function getJWTCustomClaims(){
+    public function getJWTCustomClaims()
+    {
         return [];
     }
 }
